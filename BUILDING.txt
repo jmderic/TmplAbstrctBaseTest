@@ -1,0 +1,32 @@
+emacs build line with detail:
+make -k VERBOSE=1
+
+Default production build>
+BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake ../quick_start
+
+Debug build:
+BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DCMAKE_BUILD_TYPE=Debug ../quick_start
+
+Note on ASAN:
+
+There is now an asan_support.hpp header which conditionally defines
+ATTRIBUTE_NO_SANITIZE_ADDRESS.
+
+This was used in CodeDup_Filter.hpp but, with this commit, the use was
+expunged.  But replaced with a use in CodeDup_FileLine.cpp.
+
+The resulting thinking is that asan_support.hpp should only be used in
+compilation units, not headers.
+
+Jury still out, but this seem to be a best practice.
+
+Change to separate ASAN from LSAN w/cmake (all invoke with -DCMAKE_BUILD_TYPE=Debug):
+Build with AdddressSanitizer only:
+BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON ../quick_start
+Build with LeakSanitizer only:
+BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DLSAN_ENABLED=ON ../quick_start
+Both ENABLED flags for both:
+BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON -DLSAN_ENABLED=ON ../quick_start
+
+cleanup notes:
+(query-replace-regexp "  *$" "" nil (if (use-region-p) (region-beginning)) (if (use-region-p) (region-end)) nil nil)
