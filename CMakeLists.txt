@@ -29,6 +29,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 set (TABtest_SOURCES
   main.cpp
   blue.cpp
+  green.cpp
   )
 
 include_directories(
