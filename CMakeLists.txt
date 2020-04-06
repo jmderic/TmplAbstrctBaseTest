@@ -1,14 +1,14 @@
 # only one tested
 cmake_minimum_required (VERSION 3.10)
 
-project (Qstart)
+project (TABtest)
 
 # The version number.  (works with config file)
-set (Qstart_MAJOR_VERSION 0)
-set (Qstart_MINOR_VERSION 1)
-set (Qstart_PATCH_VERSION 0)
-set(Qstart_VERSION
-  ${Qstart_MAJOR_VERSION}.${Qstart_MINOR_VERSION}.${Qstart_PATCH_VERSION})
+set (TABtest_MAJOR_VERSION 0)
+set (TABtest_MINOR_VERSION 1)
+set (TABtest_PATCH_VERSION 0)
+set(TABtest_VERSION
+  ${TABtest_MAJOR_VERSION}.${TABtest_MINOR_VERSION}.${TABtest_PATCH_VERSION})
 
 # basic compile standards
 set(CMAKE_CXX_STANDARD 14)
@@ -26,12 +26,9 @@ set(CMAKE_C_EXTENSIONS OFF)
 ## PROJECT specific
 
 # creating the executable
-set (Qstart_SOURCES
+set (TABtest_SOURCES
   main.cpp
-  )
-
-set (QstartC_SOURCES
-  main.c
+  blue.cpp
   )
 
 include_directories(
@@ -69,8 +66,5 @@ endif(LSAN_ENABLED)
 
 ## TARTGET specific
 
-add_executable(Qstart ${Qstart_SOURCES})
-target_compile_options(Qstart PRIVATE -Werror -Wall -Wextra)
-
-add_executable(QstartC ${QstartC_SOURCES})
-target_compile_options(QstartC PRIVATE -Werror -Wall -Wextra)
+add_executable(TABtest ${TABtest_SOURCES})
+target_compile_options(TABtest PRIVATE -Werror -Wall -Wextra)

@@ -1,32 +1,36 @@
 emacs build line with detail:
 make -k VERBOSE=1
 
-Default production build>
-BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake ../quick_start
+My cmake setup to build in a peer directory to the source code.  In
+other words, building next to the source tree, not into it.  Each time
+you run this command sequence, it creates a new datestamped
+directory. This builds the Makefiles in the new directory:
 
-Debug build:
-BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DCMAKE_BUILD_TYPE=Debug ../quick_start
+BUILD_DIR=template_abstract_base_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake ../template_abstract_base
 
-Note on ASAN:
+So then you cd into the new directory and type make.  I use this line
+to see the details of the command line sent to the compiler:
 
-There is now an asan_support.hpp header which conditionally defines
+make VERBOSE=1
+
+if you want a debug build, have cmake create the Makefiles this way:
+
+BUILD_DIR=template_abstract_base_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DCMAKE_BUILD_TYPE=Debug ../template_abstract_base
+
+Notes on ASAN/LSAN:
+
+There is now an asan_support.hpp header, not in the quick start, but
+you can ask about it. The header conditionally defines
 ATTRIBUTE_NO_SANITIZE_ADDRESS.
-
-This was used in CodeDup_Filter.hpp but, with this commit, the use was
-expunged.  But replaced with a use in CodeDup_FileLine.cpp.
-
 The resulting thinking is that asan_support.hpp should only be used in
 compilation units, not headers.
 
-Jury still out, but this seem to be a best practice.
+Jury still out, but this seem to be a best practice:
 
 Change to separate ASAN from LSAN w/cmake (all invoke with -DCMAKE_BUILD_TYPE=Debug):
 Build with AdddressSanitizer only:
-BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON ../quick_start
+BUILD_DIR=template_abstract_base_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON ../template_abstract_base
 Build with LeakSanitizer only:
-BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DLSAN_ENABLED=ON ../quick_start
+BUILD_DIR=template_abstract_base_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DLSAN_ENABLED=ON ../template_abstract_base
 Both ENABLED flags for both:
-BUILD_DIR=quick_start_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON -DLSAN_ENABLED=ON ../quick_start
-
-cleanup notes:
-(query-replace-regexp "  *$" "" nil (if (use-region-p) (region-beginning)) (if (use-region-p) (region-end)) nil nil)
+BUILD_DIR=template_abstract_base_build_`date '+%Y%m%d_%H%M%S'`; cd ..; mkdir $BUILD_DIR; cd $BUILD_DIR; cmake -DASAN_ENABLED=ON -DLSAN_ENABLED=ON ../template_abstract_base
